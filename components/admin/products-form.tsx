@@ -381,19 +381,24 @@ export default function ProductsForm() {
           <CardTitle>{selectedProductId ? "Modifica prodotto" : "Aggiungi prodotto"}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
+          <div className="text-sm font-medium">Titolo</div>
           <Input placeholder="Titolo" value={draft.title} onChange={(e) => setDraft((s) => ({ ...s, title: e.target.value }))} />
+          <div className="text-sm font-medium">Identificativo univoco</div>
           <Input placeholder="Identificativo univoco" value={draft.slug} onChange={(e) => setDraft((s) => ({ ...s, slug: e.target.value }))} />
+          <div className="text-sm font-medium">Descrizione</div>
           <Textarea
             placeholder="Descrizione"
             value={draft.description ?? ""}
             onChange={(e) => setDraft((s) => ({ ...s, description: e.target.value }))}
           />
+          <div className="text-sm font-medium">Prezzo base</div>
           <Input
             placeholder="Prezzo base"
             type="number"
             value={draft.base_price ?? ""}
             onChange={(e) => setDraft((s) => ({ ...s, base_price: e.target.value ? Number(e.target.value) : null }))}
           />
+          <div className="text-sm font-medium">Categoria</div>
           <Select value={draft.category_id ?? ""} onValueChange={(v) => setDraft((s) => ({ ...s, category_id: v }))}>
             <SelectTrigger>
               <SelectValue placeholder="Categoria" />
@@ -490,7 +495,7 @@ export default function ProductsForm() {
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+      
                   <div className="mt-3 flex items-center gap-4">
                     <div className="flex items-center space-x-2">
                       <Checkbox

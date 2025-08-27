@@ -112,9 +112,11 @@ export default function CategoriesForm() {
           <CardTitle>{selectedId ? "Modifica categoria" : "Aggiungi categoria"}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
+        <div className="text-sm font-medium">Nome</div>
           <Input placeholder="Nome" value={draft.name} onChange={(e) => setDraft((s) => ({ ...s, name: e.target.value }))} />
+        <div className="text-sm font-medium">Identificativo univoco</div>
           <Input placeholder="Identificativo univoco" value={draft.slug} onChange={(e) => setDraft((s) => ({ ...s, slug: e.target.value }))} />
-          
+        <div className="text-sm font-medium">Categoria</div>
           <Select value={draft.parent_id || "none"} onValueChange={(value) => setDraft((s) => ({ ...s, parent_id: value === "none" ? "" : value }))}>
             <SelectTrigger>
               <SelectValue placeholder="Seleziona categoria padre (opzionale)" />
@@ -128,7 +130,7 @@ export default function CategoriesForm() {
               ))}
             </SelectContent>
           </Select>
-          
+        <div className="text-sm font-medium">Descrizione</div>
           <Textarea
             placeholder="Descrizione"
             value={draft.description}
