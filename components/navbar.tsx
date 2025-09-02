@@ -12,11 +12,13 @@ import {
     ChevronDown,
     ChevronRight,
     ShoppingCart,
+    Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { useFavorites } from "@/components/favorites-provider";
 
 type Category = { id: string; name: string; slug: string; parent_id?: string | null };
 
@@ -33,6 +35,7 @@ export default function SiteNavbar() {
         facebook: string;
         tiktok: string;
     }>();
+    const { favoriteProductIds } = useFavorites();
 
     useEffect(() => {
         const load = async () => {
@@ -77,6 +80,11 @@ export default function SiteNavbar() {
                         categories={categories}
                         loading={loadingCats}
                         active={pathname.startsWith("/catalog")}
+                    />
+                    <NavLink
+                        href="/favorites"
+                        label="Preferiti"
+                        active={pathname.startsWith("/favorites")}
                     />
                     <NavLink
                         href="/contact"
@@ -215,6 +223,12 @@ export default function SiteNavbar() {
                                         ))}
                                 </div>
                             )}
+                            <NavLink
+                                href="/favorites"
+                                label={`Preferiti${favoriteProductIds.length ? ` (${favoriteProductIds.length})` : ""}`}
+                                active={pathname.startsWith("/favorites")}
+                                onClick={() => setOpen(false)}
+                            />
                             <NavLink
                                 href="/contact"
                                 label="Contact"

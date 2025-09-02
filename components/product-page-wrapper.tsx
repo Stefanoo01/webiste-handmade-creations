@@ -7,6 +7,9 @@ import VariantSelector from "@/components/variant-selector"
 import ProductSnipcartButton from "@/components/product-snipcart-button"
 import ShareButtons from "@/components/share-buttons"
 import { buildProductShareUrl } from "@/lib/url"
+import { Button } from "@/components/ui/button"
+import { Heart } from "lucide-react"
+import { useFavorites } from "@/components/favorites-provider"
 
 type ProductPageWrapperProps = {
   product: any
@@ -25,30 +28,30 @@ export default function ProductPageWrapper({
     finalPrice: product.base_price
   })
 
-  console.log('=== ProductPageWrapper Render ===')
-  console.log('currentSelection:', currentSelection)
-  console.log('initialVariantParam:', initialVariantParam)
+  const { isFavorite, toggleFavorite } = useFavorites()
 
   const handleSelectionChange = (selection: {
     selectedValues: Record<string, string | string[] | File | null | boolean>
     variantDelta: number
     finalPrice: number | null
   }) => {
-    console.log('=== ProductPageWrapper Selection Change ===')
-    console.log('New selection:', selection)
-    console.log('Previous selection:', currentSelection)
     setCurrentSelection(selection)
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">{product.title}</h1>
-      <p className="mt-2 text-muted-foreground">{product.description}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {product.categories?.name && <Badge variant="secondary">{product.categories.name}</Badge>}
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {product.categories?.name && <Badge variant="secondary">{product.categories.name}</Badge>}
+        </div>
+        <div className="text-2xl font-semibold">
+          {currentSelection.finalPrice !== null
+            ? new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(currentSelection.finalPrice)
+            : ""}
+        </div>
       </div>
 
-      <Separator className="my-6" />
+      <Separator />
 
       <VariantSelector
         productSlug={product.slug}
@@ -59,13 +62,25 @@ export default function ProductPageWrapper({
         onSelectionChange={handleSelectionChange}
       />
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 items-center">
         <ProductSnipcartButton
           product={product}
           images={images}
           initialVariantParam={initialVariantParam}
           currentSelection={currentSelection}
         />
+
+        <Button
+          type="button"
+          variant={isFavorite(product.id) ? "default" : "primary"}
+          className="inline-flex items-center gap-2"
+          aria-pressed={isFavorite(product.id)}
+          onClick={() => toggleFavorite(product.id, product.title)}
+        >
+          <Heart className={isFavorite(product.id) ? "h-4 w-4 fill-current" : "h-4 w-4"} />
+          {isFavorite(product.id) ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+        </Button>
+
         <ShareButtons 
           url={buildProductShareUrl(product.slug, { 
             variant: Object.entries(currentSelection.selectedValues)

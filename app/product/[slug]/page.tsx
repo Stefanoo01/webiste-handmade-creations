@@ -1,5 +1,6 @@
 import { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
+import ProductImageCarousel from "@/components/product-image-carousel"
 import { notFound } from "next/navigation"
 import ProductPageWrapper from "@/components/product-page-wrapper"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
@@ -75,29 +76,33 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-6">
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-3">
-          {images.length === 0 && (
+      <section className="mx-auto max-w-3xl text-center space-y-3 py-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{product.title}</h1>
+        {product.description && (
+          <p className="text-muted-foreground text-lg">{product.description}</p>
+        )}
+      </section>
+
+      <section className="mx-auto">
+        <div className="aspect-square rounded-2xl border overflow-hidden shadow-sm">
+          {images.length > 0 ? (
+            <ProductImageCarousel
+                images={images.map((i) => i.url)}
+                alt={product.title}
+              />
+          ) : (
             <Image
               src="/handmade-product.png"
               alt={product.title}
-              width={600}
-              height={500}
-              className="w-full rounded-lg border object-cover"
+              width={400}
+              height={400}
+              className="w-full object-cover"
             />
           )}
-          {images.map((img, i) => (
-            <Image
-              key={i}
-              src={img.url || "/placeholder.svg?height=500&width=600&query=handmade%20product"}
-              alt={img.alt}
-              width={600}
-              height={500}
-              className="w-full rounded-lg border object-cover"
-            />
-          ))}
         </div>
+      </section>
 
+      <div className="mt-8 rounded-2xl border bg-card p-6 shadow-sm">
         <ProductPageWrapper
           product={product}
           images={images}

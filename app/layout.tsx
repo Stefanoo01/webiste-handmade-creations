@@ -5,6 +5,7 @@ import './globals.css'
 import Navbar from "@/components/navbar"
 import SnipcartProvider from '@/components/snipcart-provider'
 import { Toaster } from '@/components/ui/toaster'
+import { FavoritesProvider } from '@/components/favorites-provider'
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -25,10 +26,12 @@ html {
         `}</style>
       </head>
       <body>
-        <Navbar />
-        {children}
-        <SnipcartProvider />
-        <Toaster />
+        <FavoritesProvider>
+          <Navbar />
+          {children}
+          <SnipcartProvider />
+          <Toaster />
+        </FavoritesProvider>
       </body>
     </html>
   )
